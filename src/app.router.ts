@@ -17,6 +17,7 @@ export default class AppInitializer {
     this.app.use(this.expressLib.json());
     connectDB();
     MiddlewareSetup.setup(this.app);
+    CronJobManager.register();
 
     this.app.get('/', (req: Request, res: Response) => {
       res.json({ message: 'اهلا بك في ملتقى القران الكريم جنة النجاح' });
@@ -29,7 +30,6 @@ export default class AppInitializer {
 
 
 
-// connectDB();
 
 // registerCronJobs();
 
@@ -44,4 +44,5 @@ export default class AppInitializer {
 // import DailyFollowUpRoutes from './routes/DailyFollowUp.route'
 // import ExamRequestRoutes from './routes/ExamRequest.route'
 // import ExamRoutes from './routes/Exam.route'import MiddlewareSetup from './utils/setUpMiddleware';
+import CronJobManager from './utils/cronJob/cronScheduler';
 
