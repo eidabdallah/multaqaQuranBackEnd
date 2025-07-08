@@ -1,9 +1,9 @@
 import { Application, Request, Response } from "express";
-import MiddlewareSetup from "./utils/setUpMiddleware";
 import {connectDB} from "./config/DBconnection";
-import NotFoundMiddleware from './utils/NotFound';
-import ErrorMiddleware from './utils/Error';
-
+import NotFoundMiddleware from './utils/errorHandling/NotFound';
+import CronJobManager from './utils/cronJob/cronScheduler';
+import MiddlewareSetup from './utils/middlewareCore/setUpMiddleware';
+import ErrorMiddleware from './utils/errorHandling/Error';
 export default class AppInitializer {
   private app: Application;
   private expressLib: typeof import('express');
@@ -44,5 +44,5 @@ export default class AppInitializer {
 // import DailyFollowUpRoutes from './routes/DailyFollowUp.route'
 // import ExamRequestRoutes from './routes/ExamRequest.route'
 // import ExamRoutes from './routes/Exam.route'import MiddlewareSetup from './utils/setUpMiddleware';
-import CronJobManager from './utils/cronJob/cronScheduler';
+
 
