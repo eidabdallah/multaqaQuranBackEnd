@@ -6,17 +6,16 @@ import { ICrudController } from '../../interface/crud.interface.js';
 import User from './../../Model/user.model';
 import { UserAttributes } from './../../interface/User/userAttributes';
 
-
 export default class UserController extends BaseController implements ICrudController<User, UserAttributes> {
     constructor(private userService: UserService) {
         super();
     }
     getOne = async (req: Request, res: Response, next: NextFunction) => {
-        const { userId } = req.params;
-        const user = await this.userService.checkId(parseInt(userId));
+        const { id } = req.params;
+        const user = await this.userService.checkId(parseInt(id));
         if (!user)
             return next(new ApiError("لم يتم العثور على المستخدم", 400));
-        return res.status(200).json({ message: "معلومات المستخدم", user });
+        return this.sendResponse(res, 200, "معلومات المستخدم", user);
     }
     update = async (req: Request, res: Response, next: NextFunction) => {
         const user = req.user;
@@ -30,11 +29,11 @@ export default class UserController extends BaseController implements ICrudContr
         return this.sendResponse(res, 200, "تم تحديث البيانات بنجاح");
     };
      changeRole = async (req: Request, res: Response, next: NextFunction) => { 
-        const { studentId , role } = req.body;
-        const affectedRows = await this.userService.changeRoleStudent(parseInt(studentId), role);
+        const { id , role } = req.body;
+        const affectedRows = await this.userService.changeRoleStudent(parseInt(id), role);
         if (affectedRows === 0) {
             return next(new ApiError("لم يتم تحديث ", 400));
         }
-        return res.status(200).json({ message: "تم تحديث  بنجاح" });
+        return this.sendResponse(res, 200, "تم تحديث  بنجاح");
     }  
 }
