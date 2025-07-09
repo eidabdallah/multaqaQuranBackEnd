@@ -50,7 +50,7 @@ export default class AuthController extends BaseController implements ICrudContr
         await user.save();
         confirmEmailMessage(user.fullName, res);
     };
-    get = async (req: Request, res: Response) => {
+    getOne = async (req: Request, res: Response) => {
         return res.status(200).json({ message: "بيانات المستخدم", user: req.user });
     };
     changePassword = async (req: Request, res: Response, next: NextFunction) => {
