@@ -6,13 +6,13 @@ import { ICrudController } from '../../interface/crud.interface.js';
 import User from './../../Model/user.model';
 import { UserAttributes } from './../../interface/User/userAttributes';
 
-export default class UserController extends BaseController implements ICrudController<User, UserAttributes> {
+export default class UserController extends BaseController implements ICrudController<User> {
     constructor(private userService: UserService) {
         super();
     }
     getOne = async (req: Request, res: Response, next: NextFunction) => {
         const { id } = req.params;
-        const user = await this.userService.checkId(parseInt(id));
+        const user = await this.userService.checkIdWithCache(parseInt(id));
         if (!user)
             return next(new ApiError("لم يتم العثور على المستخدم", 400));
         return this.sendResponse(res, 200, "معلومات المستخدم", user);

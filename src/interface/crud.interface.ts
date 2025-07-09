@@ -8,7 +8,7 @@ export interface ICrudService<T, CreateDto = Partial<T>> {
 
 }
 
-export interface ICrudController<T, CreateDto = Partial<T>> {
+export interface ICrudController<T> {
   create?(req: Request, res: Response, next: NextFunction): Promise<any>;
   get?(req: Request, res: Response, next: NextFunction): Promise<any>;
   getOne?(req: Request, res: Response, next: NextFunction): Promise<any>;

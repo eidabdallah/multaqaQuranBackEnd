@@ -10,7 +10,7 @@ import User from './../../Model/user.model';
 import { extractUniversityIdFromEmail } from './../../utils/authHelpers/emailUtils';
 import { generateRandomCode } from './../../utils/authHelpers/generateCode';
 
-export default class AuthController extends BaseController implements ICrudController<User, UserAttributes> {
+export default class AuthController extends BaseController implements ICrudController<User> {
     constructor(private authService: AuthService) {
         super();
     }
