@@ -4,6 +4,7 @@ import NotFoundMiddleware from './utils/errorHandling/NotFound';
 import CronJobManager from './utils/cronJob/cronScheduler';
 import MiddlewareSetup from './utils/middlewareCore/setUpMiddleware';
 import ErrorMiddleware from './utils/errorHandling/Error';
+import authRoutes from './routes/auth.routes'
 export default class AppInitializer {
   private app: Application;
   private expressLib: typeof import('express');
@@ -22,21 +23,14 @@ export default class AppInitializer {
     this.app.get('/', (req: Request, res: Response) => {
       res.json({ message: 'اهلا بك في ملتقى القران الكريم جنة النجاح' });
     });
+    this.app.use('/auth', authRoutes);
+
 
     this.app.use(NotFoundMiddleware.notFound);
     this.app.use(ErrorMiddleware.handle);
   }
 }
 
-
-
-
-// registerCronJobs();
-
-// import { connectDB } from "./config/DBconnection";
-
-// import setupMiddlewares from './utils/setupMiddlewares';
-// import registerCronJobs from './utils/startCronJobs';
 // import authRoutes from './routes/auth.route'
 // import userRoutes from './routes/user.route'
 // import halaqaRoutes from './routes/halaqa.route'
