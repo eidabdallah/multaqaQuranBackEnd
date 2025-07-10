@@ -25,6 +25,22 @@ export default class AdminController extends BaseController implements ICrudCont
         if (checkPhoneNumber)
             return next(new ApiError("رقم الهاتف مستخدم", 400));
         await this.adminService.create(req.body);
-        return res.status(200).json({ message: "تم انشاء المستخدم بنجاح"});
+        return res.status(200).json({ message: "تم انشاء المستخدم بنجاح" });
     }
+    changeConfirmEmail = async (req: Request, res: Response, next: NextFunction) => {
+        const { userId } = req.params;
+        const affectedRows = await this.adminService.changeConfirmEmail(parseInt(userId));
+        if (affectedRows === 0)
+            return next(new ApiError("المستخدم غير موجود أو لم يتم تغيير الحالة", 400));
+        return res.status(200).json({ message: "تم تغيير حالة التاكيد بنجاح" });
+    }
+
+    delete = async (req: Request, res: Response, next: NextFunction) => {
+        const { userId } = req.params;
+        const affectedRows = await this.adminService.delete(parseInt(userId));
+        if (affectedRows === 0)
+            return next(new ApiError("المستخدم غير موجود أو لم يتم الحذف", 400));
+        return res.status(200).json({ message: "تم حذف المستخدم بنجاح" });
+    }
+
 }

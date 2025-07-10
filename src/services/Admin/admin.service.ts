@@ -28,4 +28,12 @@ export default class AdminService extends BaseService<User> implements ICrudServ
         userData.password = await bcrypt.hash(userData.password, +process.env.SALT_ROUNDS!);
         return await User.create({ ...userData, confirmEmail: true , status: 'Active' });
     }
+     async changeConfirmEmail(id: number): Promise<number> {
+        const [affectedRows] = await User.update({ confirmEmail: true }, { where: { id } });
+        return affectedRows;
+    }
+    async delete(id: number): Promise<number> {
+        const affectedRows = await User.destroy({ where: { id } });
+        return affectedRows;
+    }
 }
