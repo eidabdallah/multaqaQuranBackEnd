@@ -120,6 +120,17 @@ export default class HalaqaController extends BaseController implements ICrudCon
         }
         return res.status(200).json({ message: "تم تحديث المشرف بنجاح" });
     }
+    allStudentsByCollege = async (req: Request, res: Response, next: NextFunction) => {
+        const user = req.user;
+        if (!user) { return next(new ApiError("لم يتم العثور على المستخدم", 400)); }
+        const role = req.query.role as Roles;
+         const search = req.query.search as string;
+        const students = await this.halaqaService.allStudentsByCollege(user.CollegeName , user.gender , role , search);
+        if (students.length === 0) {
+            return next(new ApiError("لم يتم العثور على الطلاب", 400));
+        }
+        return res.status(200).json({ message: "تم العثور على الطلاب", students });
+    }
 
 }
 

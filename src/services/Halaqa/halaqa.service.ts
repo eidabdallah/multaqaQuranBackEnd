@@ -6,7 +6,7 @@ import { CacheManager } from './../../utils/nodeCache/cache';
 import { HalaqaAttributes } from './../../interface/Halaqa/halaqaAttributes';
 import User from './../../Model/user.model';
 import { Op } from 'sequelize';
-import sequelize from 'sequelize';
+import { Roles } from '../../utils/enum/role.enum';
 
 export default class HalaqaService extends BaseService<Halaqa> implements ICrudService<Halaqa, HalaqaCreationAttributes> {
     constructor() {
@@ -92,4 +92,21 @@ export default class HalaqaService extends BaseService<Halaqa> implements ICrudS
         const [affectedCount] = await User.update({ halaqaId }, { where: { id: studentId } });
         return affectedCount;
     }
+    async allStudentsByCollege(CollegeName: string, gender: string, role?: Roles, search?: string): Promise<User[]> {
+        const cacheKey = `students_${CollegeName}_${gender}_${role || 'any'}_${search || 'none'}`;
+        let students = CacheManager.get<User[]>(cacheKey);
+        if (students) return students;
+
+        const whereCondition: any = { CollegeName, gender, status: 'Active' };
+        if (role) whereCondition.role = role;
+        if (search) whereCondition.fullName = { [Op.like]: `%${search}%` };
+
+        students = await User.findAll({
+            where: whereCondition,
+            attributes: ['id', 'fullName', 'role', 'gender', 'CollegeName'],
+        });
+        CacheManager.set(cacheKey, students);
+        return students;
+    }
+
 }
