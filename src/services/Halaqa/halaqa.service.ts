@@ -76,13 +76,20 @@ export default class HalaqaService extends BaseService<Halaqa> implements ICrudS
         return await Halaqa.findOne({ where: { supervisorId } });
     }
     async update(id: number, data: Partial<Halaqa>): Promise<number> {
-        const [affectedCount] = await Halaqa.update(data, { where: { id } });
+        const [affectedCount] = await Halaqa.update({supervisorId : data.supervisorId}, { where: { id } });
+         if (affectedCount > 0) {
+            CacheManager.del(`supervisors_${data.collegeName}_${data.gender}`);
+        }
         return affectedCount;
     }
-     async getStudentsWithoutHalaqa(CollegeName: string, gender: string): Promise<User[] | null> {
+    async getStudentsWithoutHalaqa(CollegeName: string, gender: string): Promise<User[] | null> {
         return await User.findAll({
             where: { CollegeName, gender, halaqaId: null , status: 'Active' ,  role: { [Op.notIn]: ['Doctor', 'Admin'] }, },
             attributes: ['id', 'fullName']
         });
+    }
+    async updateStudentSupervisor(studentId: number, halaqaId: number): Promise<number> {
+        const [affectedCount] = await User.update({ halaqaId }, { where: { id: studentId } });
+        return affectedCount;
     }
 }

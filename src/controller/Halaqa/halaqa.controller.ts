@@ -88,7 +88,7 @@ export default class HalaqaController extends BaseController implements ICrudCon
         if (checkSupervisorHalaqa) {
             return next(new ApiError("المشرف لديه حلقة مسبقا", 400));
         }
-        const affectedRows = await this.halaqaService.update(parseInt(halaqaId), {supervisorId : parseInt(supervisorId)});
+        const affectedRows = await this.halaqaService.update(parseInt(halaqaId), {supervisorId : parseInt(supervisorId) , collegeName : checkSupervisor.CollegeName , gender : checkSupervisor.gender});
         if (affectedRows === 0) {
             return next(new ApiError("لم يتم تحديث المشرف", 400));
         }
@@ -103,6 +103,22 @@ export default class HalaqaController extends BaseController implements ICrudCon
             return next(new ApiError("لم يتم العثور على الطلاب", 400));
         }
         return res.status(200).json({ message: "تم العثور على الطلاب", students });
+    }
+    updateStudentHalaqa = async (req: Request, res: Response, next: NextFunction) => { 
+        const { studentId , halaqaId } = req.params;
+        const checkHalaqa = await this.halaqaService.getOne(parseInt(halaqaId));
+        if (!checkHalaqa) {
+            return next(new ApiError("الحلقة غير موجودة", 400));
+        }
+        const checkStudent = await this.halaqaService.checkIdWithCache(parseInt(studentId));
+        if (!checkStudent) {
+            return next(new ApiError("الطالب غير موجود", 400));
+        }
+        const affectedRows = await this.halaqaService.updateStudentSupervisor(parseInt(studentId), parseInt(halaqaId));
+        if (affectedRows === 0) {
+            return next(new ApiError("لم يتم تحديث المشرف", 400));
+        }
+        return res.status(200).json({ message: "تم تحديث المشرف بنجاح" });
     }
 
 }
