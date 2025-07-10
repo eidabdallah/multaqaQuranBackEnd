@@ -42,5 +42,13 @@ export default class AdminController extends BaseController implements ICrudCont
             return next(new ApiError("المستخدم غير موجود أو لم يتم الحذف", 400));
         return res.status(200).json({ message: "تم حذف المستخدم بنجاح" });
     }
+    acceptRequest = async (req: Request, res: Response, next: NextFunction) => {
+        const { userId } = req.params;
+        const affectedRows = await this.adminService.acceptRequest(parseInt(userId));
+        if (affectedRows === 0) {
+            return next(new ApiError("لم يتم قبول الطلب", 400));
+        }
+        return res.status(200).json({ message: "تم قبول الطلب بنجاح" });
+    };
 
 }

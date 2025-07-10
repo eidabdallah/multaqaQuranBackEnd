@@ -6,6 +6,9 @@ import  bcrypt  from 'bcryptjs';
 import { UserCreationAttributes } from "../../interface/User/userAttributes.js";
 
 export default class AdminService extends BaseService<User> implements ICrudService<User, UserCreationAttributes> {
+     constructor() {
+        super(User);
+    }
     async get(): Promise<User[] | null> {
         return await User.findAll({
             where: { status: 'No_Active', role: 'Student' },
@@ -34,6 +37,10 @@ export default class AdminService extends BaseService<User> implements ICrudServ
     }
     async delete(id: number): Promise<number> {
         const affectedRows = await User.destroy({ where: { id } });
+        return affectedRows;
+    }
+     async acceptRequest(id: number): Promise<number> {
+        const [affectedRows] = await User.update( { status: 'Active' },{ where: { id }});
         return affectedRows;
     }
 }
