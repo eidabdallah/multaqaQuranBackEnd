@@ -72,4 +72,11 @@ export default class HalaqaService extends BaseService<Halaqa> implements ICrudS
         CacheManager.set(cacheKey, supervisors);
         return supervisors;
     }
+    async checkSupervisorHaveHalaqa(supervisorId: number): Promise<Halaqa | null> {
+        return await Halaqa.findOne({ where: { supervisorId } });
+    }
+    async update(id: number, data: Partial<Halaqa>): Promise<number> {
+        const [affectedCount] = await Halaqa.update(data, { where: { id } });
+        return affectedCount;
+    }
 }

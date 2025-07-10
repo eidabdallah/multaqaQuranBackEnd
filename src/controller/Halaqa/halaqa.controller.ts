@@ -40,7 +40,7 @@ export default class HalaqaController extends BaseController implements ICrudCon
         if (!halaqat) {
             return next(new ApiError("لم يتم العثور على الحلقات", 400));
         }
-        return res.status(200).json({ message: "تم العثور على الحلقات", halaqat });
+        return this.sendResponse(res, 200, "تم العثور على الحلقات", halaqat);
     }
     // get halaqa by id
     getOne = async (req: Request, res: Response, next: NextFunction) => {
@@ -49,7 +49,7 @@ export default class HalaqaController extends BaseController implements ICrudCon
         if (!halaqa) {
             return next(new ApiError("لم يتم العثور على الحلقة", 400));
         }
-        return res.status(200).json({ message: "تم العثور على الحلقة", halaqa });
+        return this.sendResponse(res, 200, "تم العثور على الحلقة", halaqa);
     }
     // delete halaqa
     delete = async (req: Request, res: Response, next: NextFunction) => {
@@ -58,7 +58,7 @@ export default class HalaqaController extends BaseController implements ICrudCon
         if (affectedRows === 0) {
             return next(new ApiError("لم يتم حذف الحلقة", 400));
         }
-        return res.status(200).json({ message: "تم حذف الحلقة بنجاح" });
+        return this.sendResponse(res, 200, "تم حذف الحلقة بنجاح");
     }
     //get all supervisors who are not responsible for the halaqa yet
     getSuperVisorsByCollege = async (req: Request, res: Response, next: NextFunction) => { 
@@ -68,7 +68,31 @@ export default class HalaqaController extends BaseController implements ICrudCon
         if (!superVisors) {
             return next(new ApiError("لم يتم العثور على المشرفين", 400));
         }
-        return res.status(200).json({ message: "تم العثور على المشرفين", superVisors });
+        return this.sendResponse(res, 200, "تم العثور على المشرفين", superVisors);
+    }
+    // update SuperVisor Halaqa
+    update = async (req: Request, res: Response, next: NextFunction) => {
+        const { halaqaId , supervisorId } = req.params;
+        const checkSupervisor = await this.userService.checkIdWithCache(parseInt(supervisorId));
+        if (!checkSupervisor) {
+            return next(new ApiError("المشرف غير موجود", 400));
+        }
+        if(checkSupervisor.status === "No_Active"){
+            return next(new ApiError("المشرف غير مفعل حسابه", 400));
+        }
+        if (checkSupervisor.role !== "TasmeaHifzSupervisor" && checkSupervisor.role !== "CollegeSupervisor" && checkSupervisor.role !== "TasmeaSupervisor") {
+            return next(new ApiError("ليش مشرفا", 400));
+        }
+        // check if supervisor have halaqa already
+        const checkSupervisorHalaqa = await this.halaqaService.checkSupervisorHaveHalaqa(parseInt(supervisorId));
+        if (checkSupervisorHalaqa) {
+            return next(new ApiError("المشرف لديه حلقة مسبقا", 400));
+        }
+        const affectedRows = await this.halaqaService.update(parseInt(halaqaId), {supervisorId : parseInt(supervisorId)});
+        if (affectedRows === 0) {
+            return next(new ApiError("لم يتم تحديث المشرف", 400));
+        }
+        return this.sendResponse(res, 200, "تم تحديث المشرف بنجاح");
     }
 
 }
