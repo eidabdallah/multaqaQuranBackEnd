@@ -94,6 +94,16 @@ export default class HalaqaController extends BaseController implements ICrudCon
         }
         return this.sendResponse(res, 200, "تم تحديث المشرف بنجاح");
     }
+    // fetch all student dont have halaqa
+    getStudentsWithoutHalaqa = async (req: Request, res: Response, next: NextFunction) => { 
+        const user = req.user;
+        if (!user) { return next(new ApiError("لم يتم العثور على المستخدم", 400)); }
+        const students = await this.halaqaService.getStudentsWithoutHalaqa(user.CollegeName , user.gender);
+        if (!students) {
+            return next(new ApiError("لم يتم العثور على الطلاب", 400));
+        }
+        return res.status(200).json({ message: "تم العثور على الطلاب", students });
+    }
 
 }
 
