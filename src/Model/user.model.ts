@@ -66,6 +66,12 @@ User.init({
   sequelize,
   tableName: 'users',
   timestamps: true,
+  indexes: [
+  { fields: ['CollegeName'] },
+  { fields: ['role'] },
+  { fields: ['gender'] },
+  { fields: ['status'] },
+]
 });
 
 User.hasOne(PasswordResetCode, { onDelete: 'CASCADE' });

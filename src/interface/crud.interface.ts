@@ -1,11 +1,10 @@
 import { Request, Response, NextFunction } from 'express';
 export interface ICrudService<T, CreateDto = Partial<T>> {
   create?(data: CreateDto): Promise<T>;
-  get?(): Promise<T[]>;
-  getOne?(id: number): Promise<T>;
+  get?(data: Partial<T>): Promise<T[] | null>;
+  getOne?(id: number): Promise<T | null>;
   update?(id: number, data: CreateDto): Promise<number>;
   delete?(id: number): Promise<number>;
-
 }
 
 export interface ICrudController<T> {

@@ -12,8 +12,11 @@ export class CacheManager {
   }
 
   static del(key: string): void {
-    this.cache.del(key);
+    if (this.cache.has(key)) {
+      this.cache.del(key);
+    }
   }
+
 
   static flush(): void {
     this.cache.flushAll();
