@@ -4,7 +4,6 @@ import UserService from './../../services/User/user.service';
 import { BaseController } from '../base.controller.js';
 import { ICrudController } from '../../interface/crud.interface.js';
 import User from './../../Model/user.model';
-import { UserAttributes } from './../../interface/User/userAttributes';
 
 export default class UserController extends BaseController implements ICrudController<User> {
     constructor(private userService: UserService) {
