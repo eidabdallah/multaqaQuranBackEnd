@@ -108,5 +108,12 @@ export default class HalaqaService extends BaseService<Halaqa> implements ICrudS
         CacheManager.set(cacheKey, students);
         return students;
     }
+     async deleteUserFromHalaqa(studentId: number): Promise<number> {
+        const [affectedRows] = await User.update(
+            { halaqaId: null },
+            { where: { id: studentId } }
+        );
+        return affectedRows;
+    }
 
 }

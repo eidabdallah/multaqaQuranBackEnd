@@ -131,6 +131,18 @@ export default class HalaqaController extends BaseController implements ICrudCon
         }
         return res.status(200).json({ message: "تم العثور على الطلاب", students });
     }
+    deleteUserFromHalaqa = async (req: Request, res: Response, next: NextFunction) => { 
+        const { studentId } = req.params;
+        const checkStudent = await this.halaqaService.checkIdWithCache(parseInt(studentId));
+        if (!checkStudent) {
+            return next(new ApiError("الطالب غير موجود", 400));
+        }
+        const affectedRows = await this.halaqaService.deleteUserFromHalaqa(parseInt(studentId));
+        if (affectedRows === 0) {
+            return next(new ApiError("لم يتم حذف المستخدم", 400));
+        }
+        return res.status(200).json({ message: "تم حذف المستخدم بنجاح" });
+    }
 
 }
 
