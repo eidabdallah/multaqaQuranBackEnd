@@ -8,10 +8,17 @@ export default class DailyFollowUpService extends BaseService<DailyFollowUp> imp
     constructor() {
         super(DailyFollowUp);
     }
-    async create(data: dailyFollowUpCreationAttributes) {
+    async create(data: dailyFollowUpCreationAttributes) : Promise<DailyFollowUp> {
         const result = await DailyFollowUp.create(data);
         CacheManager.del(`dailyFollowUp_${data.userId}`);
         return result;
+    }
+    async update(id: number, data: Partial<DailyFollowUp>): Promise<number> {
+        const [affectedCount] = await DailyFollowUp.update(data, { where: { id } });
+        if (affectedCount > 0) {
+            CacheManager.del(`dailyFollowUp_${data.userId}`);
+        }
+        return affectedCount;
     }
 
 }

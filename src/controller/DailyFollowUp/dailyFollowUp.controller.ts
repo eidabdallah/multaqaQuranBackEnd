@@ -19,6 +19,24 @@ export default class DailyFollowUpController extends BaseController implements I
         await this.DailyFollowUpService.create(req.body);
         return this.sendResponse(res, 200, "تم انشاء التقييم بنجاح");
     }
+   update = async (req: Request, res: Response, next: NextFunction) => {
+    const { id } = req.params;
+    const { ReviewInfo, date, note, savedInfo } = req.body;
+    const updatedData: Record<string, any> = {};
+    ReviewInfo !== undefined && (updatedData.ReviewInfo = ReviewInfo);
+    date !== undefined && (updatedData.date = date);
+    note !== undefined && (updatedData.note = note);
+    savedInfo !== undefined && (updatedData.savedInfo = savedInfo);
+    if (Object.keys(updatedData).length === 0) {
+        return next(new ApiError("لا يوجد بيانات لتحديثها", 400));
+    }
+    const affectedRows = await this.DailyFollowUpService.update(parseInt(id) , updatedData);
+    if (affectedRows === 0) {
+        return next(new ApiError("التقييم غير موجود", 404));
+    }
+    return this.sendResponse(res, 200, "تم التحديث بنجاح");
+}
+
 
 
 
