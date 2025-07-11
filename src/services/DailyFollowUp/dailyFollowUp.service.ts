@@ -20,5 +20,12 @@ export default class DailyFollowUpService extends BaseService<DailyFollowUp> imp
         }
         return affectedCount;
     }
+    async delete(id: number): Promise<number> {
+        const deleted = await DailyFollowUp.destroy({ where: { id } });
+        if (deleted > 0) {
+            CacheManager.del(`dailyFollowUp_${id}`);
+        }
+        return deleted;
+    }
 
 }
