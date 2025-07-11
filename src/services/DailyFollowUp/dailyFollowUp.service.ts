@@ -27,5 +27,4 @@ export default class DailyFollowUpService extends BaseService<DailyFollowUp> imp
         }
         return deleted;
     }
-
 }
