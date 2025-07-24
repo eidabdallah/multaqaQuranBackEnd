@@ -3,7 +3,6 @@ import { Roles } from '../../utils/enum/role.enum';
 import HalaqaService from './../../services/Halaqa/halaqa.service';
 import { BaseController } from '../base.controller.js';
 import Halaqa from '../../Model/halaqa.model';
-import { HalaqaCreationAttributes } from '../../interface/Halaqa/halaqaAttributes';
 import { ICrudController } from '../../interface/crud.interface';
 import { ApiError } from './../../utils/errorHandling/ApiError';
 import UserService from '../../services/User/user.service.js';
