@@ -44,46 +44,46 @@ export default class DailyFollowUpController extends BaseController implements I
         }
         return res.status(200).json({ message: "تم الحذف بنجاح" });
     }
-    // get all daily follow up for student 
-    // get = async (req: Request, res: Response, next: NextFunction) => {
-    //     const id = (req as any).user.id;
-    //     const dailyFollowUp = await this.DailyFollowUpService.get(id);
-    //     if (!dailyFollowUp) {
-    //         return next(new ApiError("لم يتم العثور على التقييم", 400));
-    //     }
-    //     return res.status(200).json({ message: "تم العثور على التقييم", dailyFollowUp });
-    // }
-    // get All Daily Follow Up For SuperVisor
-    // getAll = async (req: Request, res: Response, next: NextFunction) => {
-    //     const { id } = req.params;
-    //     const checkStudent = await this.DailyFollowUpService.checkIdWithCache(parseInt(id));
-    //     if (!checkStudent) {
-    //         return next(new ApiError("الطالب غير موجود", 400));
-    //     }
-    //     const dailyFollowUp = await this.DailyFollowUpService.getStudentFollowUps(parseInt(id), true);
-    //     if (!dailyFollowUp) {
-    //         return next(new ApiError("لم يتم العثور على التقييم", 400));
-    //     }
-    //     return res.status(200).json({ message: "تم العثور على التقييم", dailyFollowUp });
-    // }
-    // getStatistics = async (req: Request, res: Response, next: NextFunction) => {
-    //     const {  college, halaqaName, gender } = req.query;
+   //get all daily follow up for student 
+    get = async (req: Request, res: Response, next: NextFunction) => {
+        const id = (req as any).user.id;
+        const dailyFollowUp = await this.DailyFollowUpService.getStudentFollowUps(id);
+        if (!dailyFollowUp) {
+            return next(new ApiError("لم يتم العثور على التقييم", 400));
+        }
+        return res.status(200).json({ message: "تم العثور على التقييم", dailyFollowUp });
+    }
+   // get All Daily Follow Up For SuperVisor
+    getAll = async (req: Request, res: Response, next: NextFunction) => {
+        const { id } = req.params;
+        const checkStudent = await this.DailyFollowUpService.checkIdWithCache(parseInt(id));
+        if (!checkStudent) {
+            return next(new ApiError("الطالب غير موجود", 400));
+        }
+        const dailyFollowUp = await this.DailyFollowUpService.getStudentFollowUps(parseInt(id), true);
+        if (!dailyFollowUp) {
+            return next(new ApiError("لم يتم العثور على التقييم", 400));
+        }
+        return res.status(200).json({ message: "تم العثور على التقييم", dailyFollowUp });
+    }
+    getStatistics = async (req: Request, res: Response, next: NextFunction) => {
+        const {  college, halaqaName, gender } = req.query;
 
-    //     const statistics = await this.DailyFollowUpService.getStatistics({
-    //         college: college as string,
-    //         halaqaName: halaqaName as string,
-    //         gender: gender as string
-    //     });
+        const statistics = await this.DailyFollowUpService.getStatistics({
+            college: college as string,
+            halaqaName: halaqaName as string,
+            gender: gender as string
+        });
 
-    //     return res.status(200).json({
-    //         message: statistics.message,
-    //         statistics: {
-    //             totalSavedPages: statistics.totalSavedPages,
-    //             totalReviewPages: statistics.totalReviewPages,
-    //             examCount: statistics.examCount
-    //         }
-    //     });
-    // }
+        return res.status(200).json({
+            message: statistics.message,
+            statistics: {
+                totalSavedPages: statistics.totalSavedPages,
+                totalReviewPages: statistics.totalReviewPages,
+                examCount: statistics.examCount
+            }
+        });
+    }
 
 
 
