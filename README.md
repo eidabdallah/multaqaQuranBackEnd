@@ -29,26 +29,4 @@ This project provides a RESTful API to support the following features:
   - `jsonwebtoken` – Authentication via JWT
   - `bcrypt` – Password hashing
 
----
-
-## 🚀 Getting Started
-
-### 🔧 Installation
-
-```bash
-# 1. Clone the repository
-git clone https://github.com/eidabdallah/multaqaQuranBackEnd.git
-
-# 2. Navigate to the project folder
-cd multaqaQuranBackEnd
-
-# 3. Install dependencies
-npm install
-
-# 4. Create a .env file and set the following variables:
-PORT=5000
-MONGO_URI=your_mongodb_connection_string
-JWT_SECRET=your_jwt_secret
-
-# 5. Start the server
-npm run dev
+=
