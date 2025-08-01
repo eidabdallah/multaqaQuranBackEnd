@@ -20,9 +20,10 @@ This project provides a RESTful API to support the following features:
 
 - **Language:** Node.js
 - **Framework:** Express.js
-- **Database:** MongoDB
+- **Database:** MySQL
+- **ORM:** Sequelize – SQL Object Relational Mapper for Node.js
 - **Libraries & Tools:**
-  - `mongoose` – MongoDB ODM
+  - `sequelize` – ORM for SQL databases
   - `dotenv` – Environment configuration
   - `cors` – Cross-Origin support
   - `jsonwebtoken` – Authentication via JWT
